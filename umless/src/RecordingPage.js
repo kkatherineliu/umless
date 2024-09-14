@@ -4,13 +4,14 @@ import './App.css';
 function RecordingPage() {
   const videoRef = useRef(null);
   const [status, setStatus] = useState('Disconnected');
-  const [fillerWordCount, setFillerWordCount] = useState(0); // Track filler words
+  const [fillerWordCount, setFillerWordCount] = useState(0);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [interimTranscript, setInterimTranscript] = useState('');
   const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [recognitionInstance, setRecognitionInstance] = useState(null);
   const [socketInstance, setSocketInstance] = useState(null);
+  const [wpm, setWpm] = useState(0);
+  const [paceStatus, setPaceStatus] = useState('Normal');
 
   const startSpeechRecognition = async () => {
     try {
@@ -21,11 +22,13 @@ function RecordingPage() {
         process.env.REACT_APP_API_KEY,
       ]);
 
+      let startTime = Date.now();
+      let wordCount = 0;
+
       socket.onopen = () => {
         console.log('WebSocket connection opened.');
         setStatus('Connected');
 
-        // Send audio data every 250ms
         mediaRecorder.addEventListener('dataavailable', (event) => {
           if (event.data.size > 0 && socket.readyState === 1) {
             socket.send(event.data);
@@ -33,28 +36,36 @@ function RecordingPage() {
         });
 
         mediaRecorder.start(250);
-        setMediaRecorder(mediaRecorder); // Save recorder in state
-        setSocketInstance(socket); // Save socket in state
+        setMediaRecorder(mediaRecorder);
+        setSocketInstance(socket);
       };
 
-      // Handle incoming transcript messages from Deepgram
       socket.onmessage = (message) => {
         const received = JSON.parse(message.data);
         const newTranscript = received.channel.alternatives[0]?.transcript || '';
 
-        // Append transcript regardless of filler words
         if (newTranscript && received.is_final) {
           setTranscript((prev) => prev + newTranscript + ' ');
 
-          // Check for filler words and update the tally
-          const fillerWords = ['uh', 'um', 'mhmm', 'mm-mm', 'uh-uh', 'uh-huh', 'nuh-uh', 'like', 'you know', 'so']; // Example filler words
-          const wordArray = newTranscript.split(' '); // Split transcript into words
+          const fillerWords = ['uh', 'um', 'mhmm', 'mm-mm', 'uh-uh', 'uh-huh', 'nuh-uh', 'like', 'you know', 'so'];
+          const wordArray = newTranscript.split(' ');
           const countFiller = wordArray.reduce((count, word) => {
             return fillerWords.includes(word) ? count + 1 : count;
           }, 0);
-
-          // Add the count of filler words to the running tally
           setFillerWordCount((prevCount) => prevCount + countFiller);
+
+          wordCount += wordArray.length;
+
+          if (Date.now() - startTime >= 2000) {
+            const elapsedMinutes = (Date.now() - startTime) / 60000;
+            const wpm = Math.round(wordCount / elapsedMinutes / 2);
+
+            setWpm(wpm);
+            setPaceStatus(getPaceStatus(wpm));
+
+            startTime = Date.now();
+            wordCount = 0;
+          }
         }
       };
 
@@ -71,6 +82,14 @@ function RecordingPage() {
       console.error('Error accessing media devices.', error);
       setStatus('Error accessing microphone');
     }
+  };
+
+  const getPaceStatus = (wpm) => {
+    if (wpm > 200) return 'Too fast';
+    if (wpm > 150) return 'A little fast';
+    if (wpm > 100) return 'Normal';
+    if (wpm > 50) return 'A little slow';
+    return 'Too slow';
   };
 
   useEffect(() => {
@@ -93,7 +112,7 @@ function RecordingPage() {
 
       videoRef.current.srcObject = stream;
 
-      startSpeechRecognition(); // Start the speech recognition with Deepgram
+      startSpeechRecognition();
 
       setRecording(true);
     } catch (error) {
@@ -108,9 +127,6 @@ function RecordingPage() {
     if (socketInstance) {
       socketInstance.close();
     }
-    if (recognitionInstance) {
-      recognitionInstance.stop();
-    }
     setRecording(false);
   };
 
@@ -118,17 +134,17 @@ function RecordingPage() {
     <div className="App">
       <header className="App-header">
         <h1>umless</h1>
-        
         <video ref={videoRef} autoPlay playsInline className="video" />
         <p>Status: {status}</p>
         <p>Transcript: {transcript}</p>
         <p>Filler Word Count: {fillerWordCount}</p>
+        <p>Words Per Minute: {wpm}</p>
+        <p>Pace: {paceStatus}</p>
         {!recording ? (
           <button onClick={startRecording}>Start Recording</button>
         ) : (
           <button onClick={stopRecording}>Stop Recording</button>
         )}
-
         <div className="transcript-container">
           <p>{transcript} <span style={{ color: 'gray' }}>{interimTranscript}</span></p> {/* Display final and interim */}
         </div>
