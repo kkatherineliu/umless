@@ -62,7 +62,6 @@ function RecordingPage() {
             "uh-huh",
             "nuh-uh",
             "like",
-            "you know",
             "so",
           ]; // Example filler words
           const wordArray = newTranscript.split(" "); // Split transcript into words
