@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  django:
+    build:
+      context: ./umless-backend
+      dockerfile: Dockerfile
+    container_name: django-umless
+    ports:
+      - "8000:8000"
