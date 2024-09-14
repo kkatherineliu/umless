@@ -1,32 +1,35 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './App.css';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./App.css";
 
 function RecordingPage() {
   const videoRef = useRef(null);
-  const [status, setStatus] = useState('Disconnected');
+  const [status, setStatus] = useState("Disconnected");
   const [fillerWordCount, setFillerWordCount] = useState(0); // Track filler words
   const [recording, setRecording] = useState(false);
-  const [transcript, setTranscript] = useState('');
-  const [interimTranscript, setInterimTranscript] = useState('');
+  const [transcript, setTranscript] = useState("");
+  const [interimTranscript, setInterimTranscript] = useState("");
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [recognitionInstance, setRecognitionInstance] = useState(null);
   const [socketInstance, setSocketInstance] = useState(null);
+  const navigate = useNavigate(); 
+
 
   const startSpeechRecognition = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
-      const socket = new WebSocket('wss://api.deepgram.com/v1/listen?model=nova-2&filler_words=true', [
-        'token',
-        process.env.REACT_APP_API_KEY,
-      ]);
+      const socket = new WebSocket(
+        "wss://api.deepgram.com/v1/listen?model=nova-2&filler_words=true",
+        ["token", process.env.REACT_APP_API_KEY]
+      );
 
       socket.onopen = () => {
-        console.log('WebSocket connection opened.');
-        setStatus('Connected');
+        console.log("WebSocket connection opened.");
+        setStatus("Connected");
 
         // Send audio data every 250ms
-        mediaRecorder.addEventListener('dataavailable', (event) => {
+        mediaRecorder.addEventListener("dataavailable", (event) => {
           if (event.data.size > 0 && socket.readyState === 1) {
             socket.send(event.data);
           }
@@ -40,15 +43,27 @@ function RecordingPage() {
       // Handle incoming transcript messages from Deepgram
       socket.onmessage = (message) => {
         const received = JSON.parse(message.data);
-        const newTranscript = received.channel.alternatives[0]?.transcript || '';
+        const newTranscript =
+          received.channel.alternatives[0]?.transcript || "";
 
         // Append transcript regardless of filler words
         if (newTranscript && received.is_final) {
-          setTranscript((prev) => prev + newTranscript + ' ');
+          setTranscript((prev) => prev + newTranscript + " ");
 
           // Check for filler words and update the tally
-          const fillerWords = ['uh', 'um', 'mhmm', 'mm-mm', 'uh-uh', 'uh-huh', 'nuh-uh', 'like', 'you know', 'so']; // Example filler words
-          const wordArray = newTranscript.split(' '); // Split transcript into words
+          const fillerWords = [
+            "uh",
+            "um",
+            "mhmm",
+            "mm-mm",
+            "uh-uh",
+            "uh-huh",
+            "nuh-uh",
+            "like",
+            "you know",
+            "so",
+          ]; // Example filler words
+          const wordArray = newTranscript.split(" "); // Split transcript into words
           const countFiller = wordArray.reduce((count, word) => {
             return fillerWords.includes(word) ? count + 1 : count;
           }, 0);
@@ -59,23 +74,23 @@ function RecordingPage() {
       };
 
       socket.onclose = () => {
-        console.log('WebSocket connection closed.');
-        setStatus('Disconnected');
+        console.log("WebSocket connection closed.");
+        setStatus("Disconnected");
       };
 
       socket.onerror = (error) => {
-        console.log('WebSocket error:', error);
-        setStatus('Error');
+        console.log("WebSocket error:", error);
+        setStatus("Error");
       };
     } catch (error) {
-      console.error('Error accessing media devices.', error);
-      setStatus('Error accessing microphone');
+      console.error("Error accessing media devices.", error);
+      setStatus("Error accessing microphone");
     }
   };
 
   useEffect(() => {
     return () => {
-      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
       }
       if (socketInstance && socketInstance.readyState === WebSocket.OPEN) {
@@ -97,7 +112,7 @@ function RecordingPage() {
 
       setRecording(true);
     } catch (error) {
-      console.error('Error accessing webcam or microphone:', error);
+      console.error("Error accessing webcam or microphone:", error);
     }
   };
 
@@ -112,14 +127,27 @@ function RecordingPage() {
       recognitionInstance.stop();
     }
     setRecording(false);
+
+    navigate("/results", {
+      state: {
+        fillerWordCount,
+        transcript },
+    });
   };
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>umless</h1>
-        
-        <video ref={videoRef} autoPlay playsInline className="video" />
+
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          className="video"
+          style={{ transform: "scaleX(-1)" }}
+        />
         <p>Status: {status}</p>
         <p>Transcript: {transcript}</p>
         <p>Filler Word Count: {fillerWordCount}</p>
@@ -130,7 +158,11 @@ function RecordingPage() {
         )}
 
         <div className="transcript-container">
-          <p>{transcript} <span style={{ color: 'gray' }}>{interimTranscript}</span></p> {/* Display final and interim */}
+          <p>
+           
+            <span style={{ color: "gray" }}>{interimTranscript}</span>
+          </p>{" "}
+          {/* Display final and interim */}
         </div>
       </header>
     </div>

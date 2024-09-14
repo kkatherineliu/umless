@@ -1,9 +1,15 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-import './App.css';
-import RecordingPage from './RecordingPage';
-import LoginButton from './login';
-import LogoutButton from './logout';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import "./App.css";
+import RecordingPage from "./RecordingPage";
+import ResultsPage from "./ResultsPage";
+import LoginButton from "./login";
+import LogoutButton from "./logout";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
@@ -13,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/record" element={<RecordingPage />} />
+          <Route path="/results" element={<ResultsPage />} />
         </Routes>
       </div>
     </Router>
@@ -35,12 +42,10 @@ function NavigateButton() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/record');
+    navigate("/record");
   };
 
-  return (
-    <button onClick={handleClick}>Go to Recording Page</button>
-  );
+  return <button onClick={handleClick}>Go to Recording Page</button>;
 }
 
 export default App;
