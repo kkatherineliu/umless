@@ -4,8 +4,45 @@ import './App.css';
 function App() {
   const videoRef = useRef(null);
   const [recording, setRecording] = useState(false);
+  const [transcript, setTranscript] = useState('');
+  const [interimTranscript, setInterimTranscript] = useState('');
   const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [recordedChunks, setRecordedChunks] = useState([]);
+  const [recognitionInstance, setRecognitionInstance] = useState(null);
+
+  const startSpeechRecognition = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+      let finalTranscript = '';
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+          setInterimTranscript('');
+        } else {
+          setInterimTranscript(event.results[i][0].transcript);
+        }
+      }
+
+      setTranscript((prev) => prev + finalTranscript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error: ", event.error);
+    };
+
+    recognition.onend = () => {
+      console.log("Speech recognition ended.");
+    };
+
+    recognition.start();
+    setRecognitionInstance(recognition);
+  };
 
   const startRecording = async () => {
     try {
@@ -19,54 +56,41 @@ function App() {
       const recorder = new MediaRecorder(stream);
       setMediaRecorder(recorder);
 
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          setRecordedChunks((prev) => [...prev, event.data]);
-        }
-      };
-
       recorder.start();
       setRecording(true);
 
-      // Stop recording after 5 seconds for demo purposes
-      setTimeout(() => stopRecording(recorder), 5000);
-
+      startSpeechRecognition();
     } catch (error) {
       console.error('Error accessing webcam or microphone:', error);
     }
   };
 
-  const stopRecording = (recorder) => {
-    recorder.stop();
+  const stopRecording = (recorder, recognition) => {
+    if (recorder) {
+      recorder.stop();
+    }
+    if (recognition) {
+      recognition.stop();
+    }
     setRecording(false);
-  };
-
-  const downloadRecording = () => {
-    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'presentation.webm';
-    a.click();
-    URL.revokeObjectURL(url);
-    setRecordedChunks([]);
   };
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>umless</h1>
-        <video ref={videoRef} autoPlay playsInline style={{ width: '600px', height: '400px', backgroundColor: 'black' }} />
         
+        <video ref={videoRef} autoPlay playsInline className="video" />
+
         {!recording ? (
           <button onClick={startRecording}>Start Recording</button>
         ) : (
-          <button onClick={() => stopRecording(mediaRecorder)}>Stop Recording</button>
+          <button onClick={() => stopRecording(mediaRecorder, recognitionInstance)}>Stop Recording</button>
         )}
 
-        {recordedChunks.length > 0 && (
-          <button onClick={downloadRecording}>Download Video</button>
-        )}
+        <div className="transcript-container">
+          <p>{transcript} <span style={{ color: 'gray' }}>{interimTranscript}</span></p> {/* Display final and interim */}
+        </div>
       </header>
     </div>
   );
