@@ -194,8 +194,8 @@ function RecordingPage() {
         <div className="statistic">
           <span className="label pace-label">{paceStatus}</span>
         </div>
-        <div className="transcript-container" style={{"min-width": "45px"}}>
-          <span className="transcript">{interimTranscript}</span>
+        <div className="transcript-container" style={{"min-height": "135px"}}>
+          <div className="transcript">{interimTranscript}</div>
         </div>
       </div>
     </div>

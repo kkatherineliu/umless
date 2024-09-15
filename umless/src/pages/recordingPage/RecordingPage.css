@@ -48,6 +48,7 @@ src: local("Staywork"),
     align-items: center;
     justify-content: space-around;
     gap: 30px;
+    min-width: 450px;
 }
 
 .label {
@@ -76,5 +77,6 @@ src: local("Staywork"),
 .transcript {
     font-size: 40px;
     color: #5b3b31;
-    min-width: 45px;
+    min-height: 135px;
+    overflow: nowrap;
 }
