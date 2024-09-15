@@ -45,7 +45,7 @@ function ResultsPage() {
         </div>
         <div className="button-container">
           <button onClick={handleNewRecording}>new recording</button>
-          <button onClick={() => navigate("/history")}>see history</button>
+          <button>see history</button>
         </div>
       </div>
     </div>
