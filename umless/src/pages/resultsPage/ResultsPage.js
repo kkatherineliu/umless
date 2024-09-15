@@ -16,6 +16,15 @@ function ResultsPage() {
     const regex = new RegExp(`\\b(${fillerWords.join('|')})\\b`, 'gi');
     return text.replace(regex, (match) => `<span class="highlight">${match}</span>`);
   };
+  let countFiller = 0;
+  transcript.split(' ').forEach((word) => {
+    const cleanedWord = word.replace(/^[.,!?;:'"()[\]{}]+|[.,!?;:'"()[\]{}]+$/g, "").toLowerCase();
+    // console.log(cleanedWord)
+
+    if (fillerWords.includes(cleanedWord)) {
+      countFiller += 1
+    }
+  });
 
   const handleNewRecording = () => {
     navigate("/record");
@@ -34,14 +43,14 @@ function ResultsPage() {
             <span className="stat-label">FILLER</span>
             <span className="stat-label">WORDS:</span>
           </span>
-          <span className="stat-value">{fillerWordCount}</span>
+          <span className="stat-value">{countFiller}</span>
         </div>
         <div className="results-stat">
           <span>
             <span className="stat-label">AMOUNT</span>
             <span className="stat-label">DONATED:</span>
           </span>
-          <span className="stat-value">${(fillerWordCount * 0.05).toFixed(2)}</span>
+          <span className="stat-value">${(countFiller * 0.05).toFixed(2)}</span>
         </div>
         <div className="button-container">
           <button onClick={handleNewRecording}>new recording</button>
