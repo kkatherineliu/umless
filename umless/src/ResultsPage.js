@@ -17,8 +17,6 @@ function ResultsPage() {
     "uh-huh",
     "nuh-uh",
     "like",
-    "you know",
-    "so",
   ];
 
   // Function to split transcript and highlight filler words
