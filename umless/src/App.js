@@ -6,12 +6,12 @@ import {
   useNavigate,
 } from "react-router-dom";
 import "./App.css";
-import RecordingPage from "./RecordingPage";
-import ResultsPage from "./ResultsPage";
-import LoginButton from "./login";
-import LogoutButton from "./logout";
+import RecordingPage from "./pages/recordingPage/RecordingPage";
+import ResultsPage from "./pages/resultsPage/ResultsPage";
+import LoginButton from "./components/login/login";
+import LogoutButton from "./components/logout/logout";
 import { useAuth0 } from "@auth0/auth0-react";
-import "./assets/staywork.ttf";
+import "./assets/fonts/staywork.ttf";
 
 function App() {
   return (

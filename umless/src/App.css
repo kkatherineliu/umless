@@ -6,7 +6,7 @@
 @font-face {
   font-family: "Staywork";
   src: local("Staywork"),
-    url("./assets/staywork.ttf") format("truetype");
+    url("./assets/fonts/staywork.ttf") format("truetype");
 }
 
 body {
@@ -31,7 +31,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-image: url('./assets/home_background.png');
+  background-image: url('./assets/images/home_background.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

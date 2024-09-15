@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./App.css";
+import "./RecordingPage.css";
 
 function RecordingPage() {
   const videoRef = useRef(null);
