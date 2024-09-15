@@ -22,8 +22,8 @@ function RecordingPage() {
 
   const coinDrop = () => {
     // Move both the arm and coin 80px to the left
-    setArmPosition(armPosition - 120);
-    setCoinPositionX(coinPositionX - 90);
+    setArmPosition(armPosition - 170);
+    setCoinPositionX(coinPositionX - 140);
 
     setTimeout(() => {
       setArmPosition(armPosition); 
@@ -43,6 +43,13 @@ function RecordingPage() {
       //setCoinPositionX(coinPositionX);
     //}, 1000)
     //setCoinVisible(true);
+  };
+
+  const getGooseImage = () => {
+    if (fillerWordCount >= 5) return `${process.env.PUBLIC_URL}/assets/goose4.png`;
+    if (fillerWordCount >= 4) return `${process.env.PUBLIC_URL}/assets/goose3.png`;
+    if (fillerWordCount >= 2) return `${process.env.PUBLIC_URL}/assets/goose2.png`;
+    return `${process.env.PUBLIC_URL}/assets/goose1.png`;
   };
 
   const startSpeechRecognition = async () => {
@@ -92,7 +99,6 @@ function RecordingPage() {
             });
             setInterimTranscript("");
 
-            // Check for filler words and update the tally
             const fillerWords = [
               "uh",
               "um",
@@ -212,6 +218,11 @@ function RecordingPage() {
 
   return (
     <div className="container">
+    <img
+        src={getGooseImage()}
+        alt="goose"
+        className="goose-image"
+      />
       <div className="video-container">
         <video
           className="video"
