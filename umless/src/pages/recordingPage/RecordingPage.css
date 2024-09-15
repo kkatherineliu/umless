@@ -16,6 +16,15 @@ src: local("Staywork"),
     height: 100vh;
     width: 100vw;
     background-color: #E0CCBB;
+    position: relative;
+}
+
+.goose-image {
+    position: absolute;
+    bottom: 10px;
+    left: 40%;
+    width: 400px;
+    z-index: 10000;
 }
 
 .video {
@@ -53,14 +62,13 @@ src: local("Staywork"),
 
 .label {
     font-size: 70px;
-    color:#5b3b31;
+    color: #5b3b31;
 }
 
 .pace-label {
     font-size: 40px;
     color: #5b3b31;
 }
-
 
 .jar {
     position: relative; /* Ensure the text is positioned relative to the image */
@@ -91,8 +99,9 @@ src: local("Staywork"),
 }
 
 .transcript {
-    font-size: 40px;
+    font-size: 20px;
     color: #5b3b31;
     min-height: 135px;
     overflow: nowrap;
+    font-family: Arial;
 }
