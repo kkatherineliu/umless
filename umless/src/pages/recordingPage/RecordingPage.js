@@ -105,20 +105,32 @@ function RecordingPage() {
               "like",
             ]; // Example filler words
             const wordArray = newTranscript.split(" ");
-            const countFiller = wordArray.reduce((count, word) => {
-              // Clean the word by removing punctuation
-              const cleanedWord = word.replace(/^[.,!?;:'"()[\]{}]+|[.,!?;:'"()[\]{}]+$/g, "");
-              
-              // Check if the cleaned word is in the list of filler words
+
+            let countFiller = 0;
+            wordArray.forEach((word) => {
+              const cleanedWord = word.replace(/^[.,!?;:'"()[\]{}]+|[.,!?;:'"()[\]{}]+$/g, "").toLowerCase();
+              // console.log(cleanedWord)
+
               if (fillerWords.includes(cleanedWord)) {
                 coinDrop();
-                return count + 1; // Increment count if it is a filler word
-              } else {
-                return count; // Return the current count if it is not a filler word
+                // console.log("registered filler " + cleanedWord);
+                countFiller += 1
               }
-            }, 0);
-            
+            });
 
+            // const countFiller = wordArray.reduce((count, word) => {
+            //   // Clean the word by removing punctuation
+            //   const cleanedWord = word.replace(/^[.,!?;:'"()[\]{}]+|[.,!?;:'"()[\]{}]+$/g, "");
+              
+            //   // Check if the cleaned word is in the list of filler words
+            //   if (fillerWords.includes(cleanedWord)) {
+            //     coinDrop();
+            //     return count + 1; // Increment count if it is a filler word
+            //   } else {
+            //     return count; // Return the current count if it is not a filler word
+            //   }
+            // }, 0);
+            
             setFillerWordCount((prevCount) => {
               const newCount = prevCount + countFiller;
               // console.log("Updated filler word count:", newCount);
