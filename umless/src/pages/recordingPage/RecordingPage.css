@@ -74,6 +74,7 @@ src: local("Staywork"),
     color: white; /* Text color */
     font-size: 85px; /* Font size for the text */
     font-weight: 200; /* Font weight for the text */
+    padding-left: 10px;
   }
 
 .value {
