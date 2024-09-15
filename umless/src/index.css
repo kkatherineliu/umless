@@ -12,37 +12,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-/* Custom styles for the app */
-.video {
-  width: 600px;
-  height: 400px;
-  background-color: black;
-}
-
-.transcript-container {
-  margin-top: 20px;
-  width: 600px;
-  text-align: left;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.App-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-h1, h2 {
-  margin: 10px 0;
-}

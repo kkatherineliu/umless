@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./ResultsPage.css"; // Import the new CSS
 
 function ResultsPage() {
   const navigate = useNavigate();
@@ -7,19 +8,10 @@ function ResultsPage() {
 
   const { fillerWordCount = 0, transcript = "" } = location.state || {};
 
-  // Define the filler words to highlight
   const fillerWords = [
-    "uh",
-    "um",
-    "mhmm",
-    "mm-mm",
-    "uh-uh",
-    "uh-huh",
-    "nuh-uh",
-    "like",
+    "uh", "um", "mhmm", "mm-mm", "uh-uh", "uh-huh", "nuh-uh", "like"
   ];
 
-  // Function to split transcript and highlight filler words
   const highlightFillerWords = (text) => {
     const words = text.split(" ");
     return words.map((word, index) => {
@@ -36,18 +28,36 @@ function ResultsPage() {
   };
 
   const handleNewRecording = () => {
-    navigate("/record"); // Go back to the recording page
+    navigate("/record");
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Recording Results</h1>
-        <p>Filler Word Count: {fillerWordCount}</p>
-        <p>You have donated ${(fillerWordCount * 0.05).toFixed(2)} to charity</p>
-        <p>Transcript: {highlightFillerWords(transcript)}</p>
-        <button onClick={handleNewRecording}>Start New Recording</button>
-      </header>
+    <div className="results-page-container">
+      <h1>RECORDING RESULTS</h1>
+      <div className="transcript-box">
+        {transcript ? highlightFillerWords(transcript) : "Transcript will appear here."}
+      </div>
+
+      <div className="results-stats">
+        <div className="results-stat">
+        <span>
+          <span className="stat-label">FILLER</span>
+          <span className="stat-label">WORDS:</span>
+        </span>
+        <span className="stat-value">{fillerWordCount}</span>
+      </div>
+      <div className="results-stat">
+        <span>
+          <span className="stat-label">AMOUNT</span>
+          <span className="stat-label">DONATED:</span>
+        </span>
+        <span className="stat-value">${(fillerWordCount * 0.05).toFixed(2)}</span>
+      </div>
+        <div className="button-container">
+        <button onClick={handleNewRecording}>new recording</button>
+        <button onClick={() => navigate("/history")}>see history</button>
+      </div>
+      </div>
     </div>
   );
 }
