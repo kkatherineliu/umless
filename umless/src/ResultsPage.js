@@ -17,15 +17,13 @@ function ResultsPage() {
     "uh-huh",
     "nuh-uh",
     "like",
-    "you know",
-    "so",
   ];
 
   // Function to split transcript and highlight filler words
   const highlightFillerWords = (text) => {
     const words = text.split(" ");
     return words.map((word, index) => {
-      const cleanWord = word.toLowerCase().replace(/[.,!?]/g, ""); // Clean punctuation
+      const cleanWord = word.replace(/^[.,!?;:'"()[\]{}]+|[.,!?;:'"()[\]{}]+$/g, ''); // Clean punctuation
       if (fillerWords.includes(cleanWord)) {
         return (
           <span key={index} style={{ color: "red" }}>

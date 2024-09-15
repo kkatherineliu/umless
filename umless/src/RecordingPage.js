@@ -54,7 +54,7 @@ function RecordingPage() {
           if (isFinal) {
             setTranscript((prev) => {
               // console.log("Total transcript:", prev + newTranscript);
-              return prev + newTranscript + " ";
+              return (prev + newTranscript + " ").toLowerCase();
             });
             setInterimTranscript("");
 
@@ -69,7 +69,7 @@ function RecordingPage() {
               "nuh-uh",
               "like",
             ]; // Example filler words
-            const wordArray = newTranscript.toLowerCase().split(" ");
+            const wordArray = newTranscript.split(" ");
             const countFiller = wordArray.reduce((count, word) => {
               return fillerWords.includes(word.replace(/^[.,!?;:'"()[\]{}]+|[.,!?;:'"()[\]{}]+$/g, '')) ? count + 1 : count;
             }, 0);
@@ -93,7 +93,7 @@ function RecordingPage() {
               wordCount = 0;
             }
           } else {
-            setInterimTranscript(newTranscript);
+            setInterimTranscript(newTranscript.toLowerCase());
           }
         }
       };
