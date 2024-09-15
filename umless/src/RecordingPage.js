@@ -21,10 +21,9 @@ function RecordingPage() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       const socket = new WebSocket(
-        "wss://api.deepgram.com/v1/listen?model=nova-2&filler_words=true",
+        `wss://api.deepgram.com/v1/listen?model=nova-2&filler_words=true&interim_results=true&vad_events=true&endpointing=300&smart_format=true`,
         ["token", process.env.REACT_APP_API_KEY]
-      );
-
+      );    
       let startTime = Date.now();
       let wordCount = 0;
 
@@ -46,41 +45,55 @@ function RecordingPage() {
 
       socket.onmessage = (message) => {
         const received = JSON.parse(message.data);
-        const newTranscript =
-          received.channel.alternatives[0]?.transcript || "";
+        if (received.channel && received.channel.alternatives && received.channel.alternatives[0]) {
+          const newTranscript = received.channel.alternatives[0].transcript || ""; // represents the intermin chunk
 
-        if (newTranscript && received.is_final) {
-          setTranscript((prev) => prev + newTranscript + " ");
+          const isFinal = received.is_final;  // Check if the transcript is final
+          // console.log(received); // to test the is final stuff??
 
-          // Check for filler words and update the tally
-          const fillerWords = [
-            "uh",
-            "um",
-            "mhmm",
-            "mm-mm",
-            "uh-uh",
-            "uh-huh",
-            "nuh-uh",
-            "like",
-            "so",
-          ]; // Example filler words
-          const wordArray = newTranscript.split(" "); // Split transcript into words
-          const countFiller = wordArray.reduce((count, word) => {
-            return fillerWords.includes(word) ? count + 1 : count;
-          }, 0);
-          setFillerWordCount((prevCount) => prevCount + countFiller);
+          if (isFinal) {
+            setTranscript((prev) => {
+              // console.log("Total transcript:", prev + newTranscript);
+              return prev + newTranscript + " ";
+            });
+            setInterimTranscript("");
 
-          wordCount += wordArray.length;
+            // Check for filler words and update the tally
+            const fillerWords = [
+              "uh",
+              "um",
+              "mhmm",
+              "mm-mm",
+              "uh-uh",
+              "uh-huh",
+              "nuh-uh",
+              "like",
+            ]; // Example filler words
+            const wordArray = newTranscript.toLowerCase().split(" ");
+            const countFiller = wordArray.reduce((count, word) => {
+              return fillerWords.includes(word.replace(/^[.,!?;:'"()[\]{}]+|[.,!?;:'"()[\]{}]+$/g, '')) ? count + 1 : count;
+            }, 0);
 
-          if (Date.now() - startTime >= 2000) {
-            const elapsedMinutes = (Date.now() - startTime) / 60000;
-            const wpm = Math.round(wordCount / elapsedMinutes / 2);
+            setFillerWordCount((prevCount) => {
+              const newCount = prevCount + countFiller;
+              // console.log("Updated filler word count:", newCount);
+              return newCount;
+            });
 
-            setWpm(wpm);
-            setPaceStatus(getPaceStatus(wpm));
+            wordCount += wordArray.length;
 
-            startTime = Date.now();
-            wordCount = 0;
+            if (Date.now() - startTime >= 2000) {
+              const elapsedMinutes = (Date.now() - startTime) / 60000;
+              const wpm = Math.round(wordCount / elapsedMinutes / 2);
+
+              setWpm(wpm);
+              setPaceStatus(getPaceStatus(wpm));
+
+              startTime = Date.now();
+              wordCount = 0;
+            }
+          } else {
+            setInterimTranscript(newTranscript);
           }
         }
       };
@@ -166,7 +179,11 @@ function RecordingPage() {
           style={{ transform: "scaleX(-1)" }}
         />
         <p>Status: {status}</p>
-        <p>Transcript: {transcript}</p>
+        {/* <p>Transcript: {transcript}</p> */}
+        <div className="transcript-container">
+          <p>Transcript: {transcript}<span style={{ color: "gray" }}>{interimTranscript}</span></p>
+          {/* Display final and interim */}
+        </div>
         <p>Filler Word Count: {fillerWordCount}</p>
         <p>Words Per Minute: {wpm}</p>
         <p>Pace: {paceStatus}</p>
@@ -175,13 +192,6 @@ function RecordingPage() {
         ) : (
           <button onClick={stopRecording}>Stop Recording</button>
         )}
-        <div className="transcript-container">
-          <p>
-           
-            <span style={{ color: "gray" }}>{interimTranscript}</span>
-          </p>{" "}
-          {/* Display final and interim */}
-        </div>
       </header>
     </div>
   );
