@@ -260,11 +260,14 @@ function RecordingPage() {
           <span className="jar">{fillerWordCount}</span>
         </div>
         <div className="statistic">
-          <span className="label">Speed (WPM)</span>
+        <span className="label">SPEED (WPM)</span>
           <span className="value">{wpm}</span>
         </div>
         <div className="statistic">
-          <span className="label">{paceStatus}</span>
+          <span className="label pace-label">{paceStatus}</span>
+        </div>
+        <div className="transcript-container" style={{"min-width": "45px"}}>
+          <span className="transcript">{interimTranscript}</span>
         </div>
       </div>
     </div>

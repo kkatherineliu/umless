@@ -2,9 +2,9 @@
     --light-brown: #E0CCBB;
     --dark-brown: #5b3b31;
     --button-brown: #A58C75;
-  }
+}
   
-  .results-page-container {
+.results-page-container {
     background-color: var(--light-brown);
     width: 100vw;
     height: 100vh;
@@ -13,16 +13,16 @@
     align-items: center;
     justify-content: center;
     font-family: 'Staywork', sans-serif;
-  }
+}
   
-  h1 {
+h1 {
     font-size: 6em;
     color: var(--dark-brown);
     margin: 0;
     margin-bottom: 20px;
-  }
+}
   
-  .transcript-box {
+.transcript-box {
     font-family: arial;
     background-color: var(--dark-brown);
     color: white;
@@ -32,40 +32,43 @@
     border-radius: 20px;
     padding: 20px;
     overflow-y: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    white-space: pre-wrap;
+}
+
+.highlight {
+    color: var(--button-brown);
+    font-weight: bold;
+}
   
-  .results-stats {
+.results-stats {
     display: flex;
     justify-content: space-around;
     width: 60%;
     margin-top: 20px;
-  }
+}
   
-  .results-stat {
+.results-stat {
     display: flex;
     flex-direction: row;
     align-items: center;
     font-size: 1.5em;
     color: var(--dark-brown);
     flex: 1;
-  }
+}
   
-  .results-stat span:first-child {
+.results-stat span:first-child {
     margin-right: 20px;
     display: flex;
     flex-direction: column;
     text-align: right;
-  }
+}
   
-  .stat-label {
+.stat-label {
     display: block;
     font-size: 3rem;
-  }
+}
   
-  .results-stat .stat-value {
+.results-stat .stat-value {
     font-size: 1.8em;
     background-color: var(--dark-brown);
     color: white;
@@ -77,27 +80,26 @@
     min-width: 80px;
     min-height: 80px;
     text-align: center;
-  }
+}
   
-  .button-container {
+.button-container {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
     margin-right: -20px;
-  }
+}
   
-  button {
+button {
     background-color: var(--button-brown);
     color: white;
     font-size: 1.2em;
     padding: 10px 20px;
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     cursor: pointer;
     width: 200px;
-  }
+}
   
-  button:hover {
+button:hover {
     background-color: var(--dark-brown);
-  }
-  
+}
