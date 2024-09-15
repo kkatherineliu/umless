@@ -38,7 +38,9 @@ src: local("Staywork"),
 .stats-container {
     display: flex;
     flex-direction: column;
+    justify-content: start;
     gap: 30px;
+    max-width: 450px;
 }
 
 .statistic {
@@ -50,6 +52,12 @@ src: local("Staywork"),
 
 .label {
     font-size: 70px;
+    color:#5b3b31;
+}
+
+.pace-label {
+    font-size: 40px;
+    color: #5b3b31;
 }
 
 .value {
@@ -63,4 +71,10 @@ src: local("Staywork"),
     font-size: 85px;
     font-weight: 200;
     color: white;
+}
+
+.transcript {
+    font-size: 40px;
+    color: #5b3b31;
+    min-width: 45px;
 }

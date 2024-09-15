@@ -14,7 +14,7 @@ function RecordingPage() {
   const navigate = useNavigate(); 
 
   const [wpm, setWpm] = useState(0);
-  const [paceStatus, setPaceStatus] = useState('Normal');
+  const [paceStatus, setPaceStatus] = useState('NORMAL');
 
   const startSpeechRecognition = async () => {
     try {
@@ -114,11 +114,11 @@ function RecordingPage() {
   };
 
   const getPaceStatus = (wpm) => {
-    if (wpm > 200) return 'Too fast';
-    if (wpm > 150) return 'A little fast';
-    if (wpm > 100) return 'Normal';
-    if (wpm > 50) return 'A little slow';
-    return 'Too slow';
+    if (wpm > 200) return 'TOO FAST';
+    if (wpm > 150) return 'A LITTLE FAST';
+    if (wpm > 100) return 'NORMAL';
+    if (wpm > 50) return 'A LITTLE SLOW';
+    return 'TOO SLOW';
   };
 
   useEffect(() => {
@@ -184,15 +184,18 @@ function RecordingPage() {
 
       <div className="stats-container">
         <div className="statistic">
-          <span className="label">Filler Words</span>
+          <span className="label">FILLER WORDS</span>
           <span className="value">{fillerWordCount}</span>
         </div>
         <div className="statistic">
-          <span className="label">Speed (WPM)</span>
+        <span className="label">SPEED (WPM)</span>
           <span className="value">{wpm}</span>
         </div>
         <div className="statistic">
-          <span className="label">{paceStatus}</span>
+          <span className="label pace-label">{paceStatus}</span>
+        </div>
+        <div className="transcript-container" style={{"min-width": "45px"}}>
+          <span className="transcript">{interimTranscript}</span>
         </div>
       </div>
     </div>
@@ -201,6 +204,3 @@ function RecordingPage() {
 
 export default RecordingPage;
 
-// <div className="transcript-container">
-// <p>Transcript: {transcript}<span style={{ color: "gray" }}>{interimTranscript}</span></p>
-// </div>
