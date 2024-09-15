@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./ResultsPage.css"; // Import the new CSS
+import "./ResultsPage.css";
 
 function ResultsPage() {
   const navigate = useNavigate();
@@ -13,18 +13,8 @@ function ResultsPage() {
   ];
 
   const highlightFillerWords = (text) => {
-    const words = text.split(" ");
-    return words.map((word, index) => {
-      const cleanWord = word.replace(/^[.,!?;:'"()[\]{}]+|[.,!?;:'"()[\]{}]+$/g, ''); // Clean punctuation
-      if (fillerWords.includes(cleanWord)) {
-        return (
-          <span key={index} style={{ color: "red" }}>
-            {word}{" "}
-          </span>
-        );
-      }
-      return word + " "; // Add a space after each word
-    });
+    const regex = new RegExp(`\\b(${fillerWords.join('|')})\\b`, 'gi');
+    return text.replace(regex, (match) => `<span class="highlight">${match}</span>`);
   };
 
   const handleNewRecording = () => {
@@ -34,29 +24,29 @@ function ResultsPage() {
   return (
     <div className="results-page-container">
       <h1>RECORDING RESULTS</h1>
-      <div className="transcript-box">
-        {transcript ? highlightFillerWords(transcript) : "Transcript will appear here."}
-      </div>
-
+      <div
+        className="transcript-box"
+        dangerouslySetInnerHTML={{ __html: highlightFillerWords(transcript) }}
+      />
       <div className="results-stats">
         <div className="results-stat">
-        <span>
-          <span className="stat-label">FILLER</span>
-          <span className="stat-label">WORDS:</span>
-        </span>
-        <span className="stat-value">{fillerWordCount}</span>
-      </div>
-      <div className="results-stat">
-        <span>
-          <span className="stat-label">AMOUNT</span>
-          <span className="stat-label">DONATED:</span>
-        </span>
-        <span className="stat-value">${(fillerWordCount * 0.05).toFixed(2)}</span>
-      </div>
+          <span>
+            <span className="stat-label">FILLER</span>
+            <span className="stat-label">WORDS:</span>
+          </span>
+          <span className="stat-value">{fillerWordCount}</span>
+        </div>
+        <div className="results-stat">
+          <span>
+            <span className="stat-label">AMOUNT</span>
+            <span className="stat-label">DONATED:</span>
+          </span>
+          <span className="stat-value">${(fillerWordCount * 0.05).toFixed(2)}</span>
+        </div>
         <div className="button-container">
-        <button onClick={handleNewRecording}>new recording</button>
-        <button onClick={() => navigate("/history")}>see history</button>
-      </div>
+          <button onClick={handleNewRecording}>new recording</button>
+          <button onClick={() => navigate("/history")}>see history</button>
+        </div>
       </div>
     </div>
   );
