@@ -8,6 +8,7 @@ function RecordingPage() {
   const [fillerWordCount, setFillerWordCount] = useState(0);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [shownTranscript, setShownTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [socketInstance, setSocketInstance] = useState(null);
@@ -277,8 +278,8 @@ function RecordingPage() {
         <div className="statistic">
           <span className="label pace-label">{paceStatus}</span>
         </div>
-        <div className="transcript-container" style={{"min-height": "135px"}}>
-          <div className="transcript">{interimTranscript}</div>
+        <div className="transcript-container" style={{"minHeight": "135px"}}>
+          <div className="transcript">{(transcript + ' ' + interimTranscript).slice(-115)}</div>
         </div>
       </div>
     </div>

@@ -71,18 +71,19 @@ src: local("Staywork"),
 }
 
 .jar {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    background-image: url('jar.png');
-    background-size: cover;
-    background-position: center;
-    text-align: center;
-    line-height: 100px;
-    color: white;
-    font-size: 85px;
-    font-weight: 200;
-}
+    position: relative; /* Ensure the text is positioned relative to the image */
+    width: 100px; /* Set the width of the jar image */
+    height: 100px; /* Set the height of the jar image */
+    background-image: url('jar.png'); /* Use the jar image as the background */
+    background-size: cover; /* Ensure the image covers the element */
+    background-position: center; /* Center the image */
+    text-align: center; /* Center the text */
+    line-height: 100px; /* Vertically center the text */
+    color: white; /* Text color */
+    font-size: 85px; /* Font size for the text */
+    font-weight: 200; /* Font weight for the text */
+    padding-left: 10px;
+  }
 
 .value {
     display: flex;
