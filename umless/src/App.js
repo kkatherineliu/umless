@@ -11,6 +11,7 @@ import ResultsPage from "./ResultsPage";
 import LoginButton from "./login";
 import LogoutButton from "./logout";
 import { useAuth0 } from "@auth0/auth0-react";
+import "./assets/staywork.ttf";
 
 function App() {
   return (
@@ -31,9 +32,11 @@ function LandingPage() {
 
   return (
     <div className="App-header">
-      <h1>umless</h1>
-      <NavigateButton />
-      {!isAuthenticated ? <LoginButton /> : <LogoutButton />}
+      <h1 className="App-title">UMLESS</h1>
+      <div className="button-container">
+        <NavigateButton />
+        {!isAuthenticated ? <LoginButton /> : <LogoutButton />}
+      </div>
     </div>
   );
 }
@@ -45,7 +48,7 @@ function NavigateButton() {
     navigate("/record");
   };
 
-  return <button onClick={handleClick}>Go to Recording Page</button>;
+  return <button className="record-button" onClick={handleClick}>start recording</button>;
 }
 
 export default App;
