@@ -21,6 +21,17 @@ function RecordingPage() {
   const [wpm, setWpm] = useState(0);
   const [paceStatus, setPaceStatus] = useState("Normal");
 
+  const fillerWords = [
+    "uh",
+    "um",
+    "mhmm",
+    "mm-mm",
+    "uh-uh",
+    "uh-huh",
+    "nuh-uh",
+    "like",
+  ]; // Example filler words
+
   const coinDrop = () => {
     // Move both the arm and coin 80px to the left
     setArmPosition(armPosition - 170);
@@ -99,17 +110,6 @@ function RecordingPage() {
               return (prev + newTranscript + " ").toLowerCase();
             });
             setInterimTranscript("");
-
-            const fillerWords = [
-              "uh",
-              "um",
-              "mhmm",
-              "mm-mm",
-              "uh-uh",
-              "uh-huh",
-              "nuh-uh",
-              "like",
-            ]; // Example filler words
             const wordArray = newTranscript.split(" ");
 
             let countFiller = 0;
