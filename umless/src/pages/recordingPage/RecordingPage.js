@@ -257,7 +257,7 @@ function RecordingPage() {
         />
 
         <div className="statistic">
-          <span className="label">Filler Words</span>
+          <span className="label">FILLER WORDS</span>
           <span className="jar">{fillerWordCount}</span>
         </div>
         <div className="statistic">
