@@ -1,0 +1,66 @@
+/* :root {
+    --light-brown: #E0CCBB;
+    --dark-brown: #5b3b31;
+  } */
+
+@font-face {
+font-family: "Staywork";
+src: local("Staywork"),
+    url("../../assets/fonts/staywork.ttf") format("truetype");
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #E0CCBB;
+}
+
+.video {
+    border: 5px solid #5b3b31;
+    border-radius: 50px;
+    overflow: hidden;
+    max-height: 489px;
+    min-height: 489px;
+    max-width: 650px;
+    min-width: 650px;
+}
+
+.video-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.statistic {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 30px;
+}
+
+.label {
+    font-size: 70px;
+}
+
+.value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #5b3b31;
+    height: 100px !important;
+    width: 100px !important;
+    font-size: 85px;
+    font-weight: 200;
+    color: white;
+}

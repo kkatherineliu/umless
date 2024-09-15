@@ -166,35 +166,41 @@ function RecordingPage() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>umless</h1>
-
-        <video
+    <div className="container">
+      <div className="video-container">
+        <video className="video"
           ref={videoRef}
           autoPlay
           playsInline
           muted
-          className="video"
           style={{ transform: "scaleX(-1)" }}
         />
-        <p>Status: {status}</p>
-        {/* <p>Transcript: {transcript}</p> */}
-        <div className="transcript-container">
-          <p>Transcript: {transcript}<span style={{ color: "gray" }}>{interimTranscript}</span></p>
-          {/* Display final and interim */}
-        </div>
-        <p>Filler Word Count: {fillerWordCount}</p>
-        <p>Words Per Minute: {wpm}</p>
-        <p>Pace: {paceStatus}</p>
         {!recording ? (
           <button onClick={startRecording}>Start Recording</button>
         ) : (
           <button onClick={stopRecording}>Stop Recording</button>
         )}
-      </header>
+      </div>
+
+      <div className="stats-container">
+        <div className="statistic">
+          <span className="label">Filler Words</span>
+          <span className="value">{fillerWordCount}</span>
+        </div>
+        <div className="statistic">
+          <span className="label">Speed (WPM)</span>
+          <span className="value">{wpm}</span>
+        </div>
+        <div className="statistic">
+          <span className="label">{paceStatus}</span>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default RecordingPage;
+
+// <div className="transcript-container">
+// <p>Transcript: {transcript}<span style={{ color: "gray" }}>{interimTranscript}</span></p>
+// </div>
